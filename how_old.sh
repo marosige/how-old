@@ -3,20 +3,31 @@ set -e
 
 if [[ ! $# -eq 2 ]]; then
   echo 'usage:'
-  echo 'how_old.sh [ Birth year of the artist | Release year ] '
+  echo 'how_old.sh [ Birth year of the artist | Age of the artist ] [ Release year ] '
   exit 1
 fi
 
-BORN=$1
-RELEASED=$2
+declare -i currentYear=$(date +%Y)
+declare -i input=$1
 
-echo "Born in $BORN"
-echo "Released in $RELEASED"
+declare -i born
+declare -i age
 
-declare -i age=$RELEASED-$BORN
-echo "The artist released it at the age of $age."
+if [[ $input -lt 100 ]]; then
+  age=$input
+  born=$currentYear-$age
+else
+  born=$input
+  age=$currentYear-$born
+fi
 
-declare -i year=$(date +%Y)
-echo "The current year is $year"
-declare -i years=$year-$RELEASED
-echo "It was $years years ago."
+declare -i releaseYear=$2
+
+declare -i releaseAge=$releaseYear-$born
+
+declare -i yearsAgo=$currentYear-$releaseYear
+
+echo "The artist was born in $born."
+echo "The artist released it in $releaseYear."
+echo "The artist was $releaseAge years old then."
+echo "Now in $currentYear the release was $yearsAgo years ago and the artist is $age years old."
